@@ -1,39 +1,21 @@
-# Build directories
+﻿# Build outputs
 build/
-cmake-build-*/
-out/
 bin/
-
-# Compiled artifacts
+cmake-build-*/
 *.exe
 *.dll
-*.so
-*.dylib
-*.o
 *.obj
+*.o
 *.a
 *.lib
-*.pdb
-*.ilk
 
-# IDE and editor files
-.vs/
-.vscode/
-.idea/
-*.user
-*.suo
+# Generated market data and test output
+Data/*.csv
+Data/*.log
+Data/*.txt
+rev12_test_output.txt
 
-# Local configuration and secrets
+# Local settings and secrets
 .env
 .env.*
 !.env.example
-*.local
-
-# Logs and temporary files
-*.log
-*.tmp
-*.bak
-
-# OS files
-Thumbs.db
-.DS_Store

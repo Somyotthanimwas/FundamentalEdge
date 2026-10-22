@@ -1,28 +1,59 @@
-# FundamentalEdge
+# FundamentalUpdater Rev12 — Supertrend Pre-Buy Scanner
 
-**Stock fundamental analysis and swing trading signal tools in C++.**
+โปรแกรม Windows/C++ สำหรับคัดกรองหุ้นจาก OHLC history ใน AmiBroker เพื่อหารายชื่อหุ้นที่ยังไม่เกิด Supertrend Buy แต่ราคาอยู่ใกล้เส้น trigger ตามเกณฑ์ในโค้ด
 
-FundamentalEdge is the new project home for the FundamentalUpdater Rev12 work. The goal is to keep the project, documentation, and future verified releases organized under one repository.
+## วิธีทำงาน
 
-## Project status
+1. อ่านรายชื่อหุ้นจากไฟล์ `C:\Program Files\FundamentalUpdater_rev5\Data\Fundamental\fundamental_v4.csv` เพื่อใช้เป็น whitelist แบบอ่านอย่างเดียว (โปรแกรมนี้ไม่แก้ไข Rev5)
+2. เรียก AmiBroker ผ่าน COM (`Broker.Application`) ด้วย `tools\export_amibroker_ohlc.js` และส่งออก OHLC สูงสุด 120 แท่งต่อสัญลักษณ์ไปที่ `Data\ohlc_history.csv`
+3. คัดหุ้นที่ Supertrend (ATR 10, multiplier 3.0, source HL2) ยังเป็นขาลงและราคาอยู่ห่าง Buy trigger ไม่เกิน 1.0 ATR
+4. กรองมูลค่าซื้อขายเฉลี่ย 20 แท่งก่อนหน้าให้มากกว่า 10 ล้านบาท และคะแนนเงื่อนไขฟื้นตัวอย่างน้อย 80
+5. เขียนผลเรียงคะแนนจากมากไปน้อยที่ `Data\near_buy_results.csv`
 
-**Initial setup — executable testing is pending.**
+**ข้อจำกัด:** “Pre-Buy” เป็นเพียงการคัดกรองใกล้ trigger ไม่ใช่คำทำนายหรือการรับประกันว่าจะเกิดสัญญาณซื้อ ต้องตรวจกราฟและยืนยันด้วยข้อมูลราคาปิดด้วยตนเอง
 
-The Rev12 executable has not yet been confirmed to run successfully. Do not treat this repository as a verified release until the executable and its required files have been tested.
+## ความต้องการ
 
-## Planned workflow
+- Windows
+- AmiBroker ติดตั้งและเปิดฐานข้อมูลหุ้นที่มีข้อมูล OHLC
+- ไฟล์ Rev5 `fundamental_v4.csv` อยู่ในตำแหน่งที่ระบุข้างต้น (อ่านอย่างเดียว)
+- `C:\Windows\SysWOW64\CScript.exe` สำหรับเรียก JScript ผ่าน Windows Script Host แบบ 32-bit
 
-1. Test the Rev12 executable locally.
-2. Confirm required configuration and runtime files.
-3. Document build/run instructions and known requirements.
-4. Publish only the source and release artifacts that have been checked.
+## วิธีใช้งาน (ไฟล์ EXE ที่ให้มา)
 
-## Safety and scope
+1. แตกแพ็กเกจทั้งโฟลเดอร์ โดยคงโครงสร้าง `bin`, `tools`, `Data` และ `source` ไว้
+2. เปิด AmiBroker และตรวจว่าฐานข้อมูลพร้อมใช้งาน
+3. รัน `bin\FundamentalUpdater_rev12.exe`
+4. ตรวจผลที่ `Data\near_buy_results.csv`
 
-- This repository is separate from FundamentalUpdater Rev5 and Rev6.
-- Rev5 and Rev6 are not modified by this project.
-- No investment outcome is guaranteed. Any screening signals should be independently reviewed before making investment decisions.
+ไฟล์ตัวอย่าง `Data\near_buy_results_sample_2026-10-21.csv` เป็นข้อมูลตัวอย่างเก่า ไม่ใช่สัญญาณซื้อปัจจุบัน
 
-## Releases
+## Build จาก Source (Windows)
 
-No verified release has been published yet.
+ต้องมี CMake 3.20+ และ compiler C++17 ที่รองรับ Windows เช่น MinGW-w64 หรือ MSVC
+
+```powershell
+cmake -S . -B build
+cmake --build build --config Release
+```
+
+CMake จะวาง executable ไว้ใน `bin\FundamentalUpdater_rev12.exe`
+
+## โครงสร้างโฟลเดอร์
+
+```text
+FundamentalUpdater_rev12/
+├── CMakeLists.txt
+├── README.md
+├── bin/
+│   └── FundamentalUpdater_rev12.exe
+├── tools/
+│   └── export_amibroker_ohlc.js
+├── Data/
+│   └── near_buy_results_sample_2026-10-21.csv
+└── source/
+    ├── main.cpp
+    ├── SwingSignal.cpp
+    ├── SwingSignal.h
+    └── Config.h
+```
