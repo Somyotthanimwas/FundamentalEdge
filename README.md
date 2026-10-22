@@ -23,12 +23,10 @@
 
 ## วิธีใช้งาน (ไฟล์ EXE ที่ให้มา)
 
-1. แตกแพ็กเกจทั้งโฟลเดอร์ โดยคงโครงสร้าง bin, tools, Data และ source ไว้
+1. แตกแพ็กเกจทั้งโฟลเดอร์ โดยคงโครงสร้าง bin, tools และ source ไว้
 2. เปิด AmiBroker และตรวจว่าฐานข้อมูลพร้อมใช้งาน
 3. รัน bin\FundamentalUpdater_rev12.exe
-4. ตรวจผลที่ Data\near_buy_results.csv
-
-ไฟล์ตัวอย่าง Data\near_buy_results_sample_2026-10-21.csv เป็นข้อมูลตัวอย่างเก่า ไม่ใช่สัญญาณซื้อปัจจุบัน
+4. โปรแกรมจะสร้างโฟลเดอร์ Data ให้อัตโนมัติ และบันทึกผลที่ Data\near_buy_results.csv
 
 ## Build จาก Source (Windows)
 
@@ -51,13 +49,11 @@ FundamentalUpdater_rev12/
 │   └── FundamentalUpdater_rev12.exe
 ├── tools/
 │   └── export_amibroker_ohlc.js
-├── Data/
-│   ├── ohlc_history.csv              (สร้างใหม่เมื่อรันโปรแกรม)
-│   ├── near_buy_results.csv          (ผลสแกนที่สร้างใหม่)
-│   └── near_buy_results_sample_2026-10-21.csv
 └── source/
     ├── main.cpp
     ├── SwingSignal.cpp
     ├── SwingSignal.h
     └── Config.h
 ~~~
+
+เมื่อรันโปรแกรม โฟลเดอร์ Data จะถูกสร้างขึ้นเอง พร้อมไฟล์ OHLC และผลสแกน
