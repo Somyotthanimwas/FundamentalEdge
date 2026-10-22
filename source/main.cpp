@@ -77,6 +77,20 @@ int main()
 
     std::error_code ec;
 
+    std::filesystem::create_directories(dataDir, ec);
+
+    if (ec)
+    {
+        std::cerr
+            << "ERROR: Cannot create Data directory: "
+            << ec.message()
+            << '\\n';
+
+        return 1;
+    }
+
+    ec.clear();
+
     std::filesystem::remove(
         ohlcHistoryCsvPath,
         ec
