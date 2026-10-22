@@ -84,7 +84,7 @@ int main()
         std::cerr
             << "ERROR: Cannot create Data directory: "
             << ec.message()
-            << '\\n';
+            << '\n';
 
         return 1;
     }
